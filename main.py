@@ -1,8 +1,7 @@
 from sys import exit
-import tkinter as tk
 import pygame
 from collections import defaultdict
-from tkinter import scrolledtext
+import platform
 pygame.init()
 
 '''получает строку, которую мы помещаем в квадрат. 
@@ -24,6 +23,8 @@ def get_letter_by_index(string: str, index: int) -> str:
         return "*"
     else:
         return string[index]
+SYSTEM = str(platform.system())
+print(f'(TEST) YOUR SYSTEM IS {SYSTEM}')
 WINDOW_SIZE = 1000
 GAP = 5
 MODE = input("введите режим: ")
@@ -91,7 +92,7 @@ if MODE == "standart":
                     print("------------")
                     screen.fill((255, 255, 255))
                     space_is_pressed = True
-                    text = FONT.render(res, True, (0, 0, 0))  
+                    text = FONT.render("RESULT: " + res, True, (0, 0, 0))  
                     screen.blit(text, (0, 0))
         
         # цикл который рисует квадратики и буквы на них (а еще картинки)
@@ -111,13 +112,24 @@ if MODE == "standart":
                     elif is_pressed.get((row, col), False):
                         rect = pygame.draw.rect(screen, (0, 102, 0), (current_x, current_y, SQUARES_SIZE, SQUARES_SIZE))
                         if WITH_LINA_AND_PUDGE == "OK":
-                            scaled_image = pygame.transform.scale(pygame.image.load("Изображения/pudge.png"), (rect.width, rect.height))
+                            if SYSTEM == "Linux":
+                                try:
+                                    scaled_image = pygame.transform.scale(pygame.image.load("Загрузки/pudge.png"), (rect.width, rect.height))
+                                except:
+                                    scaled_image = pygame.transform.scale(pygame.image.load("Изображения/pudge.png"), (rect.width, rect.height))
+                            elif SYSTEM == "Windows":
+                                scaled_image = pygame.transform.scale(pygame.image.load(r"C:\Users\Downloads\pudge.png"), (rect.width, rect.height))
                             screen.blit(scaled_image, rect)
                     else:
                         rect = pygame.draw.rect(screen, (0, 0, 0), (current_x, current_y, SQUARES_SIZE, SQUARES_SIZE))
                         if WITH_LINA_AND_PUDGE == "OK":
-                            scaled_image = pygame.transform.scale(pygame.image.load("Изображения/2026-06-30_21-32.png"), (rect.width, rect.height))
-                            screen.blit(scaled_image, rect)
+                            try:
+                                scaled_image = pygame.transform.scale(pygame.image.load("Загрузки/2026-06-30_21-32.png"), (rect.width, rect.height))
+                            except:
+                                scaled_image = pygame.transform.scale(pygame.image.load("Изображения/2026-06-30_21-32.png"), (rect.width, rect.height))
+                        elif SYSTEM == "Windows":
+                                scaled_image = pygame.transform.scale(pygame.image.load(r"C:\Users\Downloads\2026-06-30_21-32.png"), (rect.width, rect.height))
+                        screen.blit(scaled_image, rect)
 
                     text_for_square = get_letter_by_index(InputString, index)
                     text = FONT.render(text_for_square, True, (255, 255, 255))  
@@ -165,7 +177,7 @@ elif MODE == "decode":
                     print(res)
                     screen.fill((255, 255, 255))
                     space_is_pressed = True
-                    text = FONT.render(res, True, (0, 0, 0))  
+                    text = FONT.render("RESULT: " + res, True, (0, 0, 0))  
                     screen.blit(text, (0, 0))
         if not space_is_pressed:
             screen.fill((255, 0, 255))
