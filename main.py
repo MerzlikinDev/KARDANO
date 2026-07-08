@@ -23,16 +23,158 @@ def get_letter_by_index(string: str, index: int) -> str:
         return "*"
     else:
         return string[index]
-SYSTEM = str(platform.system())
-print(f'(TEST) YOUR SYSTEM IS {SYSTEM}')
 WINDOW_SIZE = 1000
 GAP = 5
-MODE = input("введите режим: ")
+font = pygame.font.SysFont("arial", 40)
+
+screen = pygame.display.set_mode((WINDOW_SIZE, WINDOW_SIZE))
+text = ""
+color_when_pressed = pygame.Color('lightskyblue3')
+color_when_not_pressed = pygame.Color('chartreuse4')
+current_color = color_when_not_pressed
+is_pressed = False
+input_box = pygame.Rect(250, 470, 500, 45)
+pygame.init()
+running = True
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+            exit()
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if input_box.collidepoint(event.pos): # проверка что я попалл
+                is_pressed = True
+                current_color = color_when_pressed
+            else:
+                is_pressed = False
+                current_color = color_when_not_pressed
+            
+        if event.type == pygame.TEXTINPUT:
+            if is_pressed:
+                text += event.text
+            
+        elif event.type == pygame.KEYDOWN:
+            if is_pressed:
+                if event.key == pygame.K_RETURN:
+                    MODE = text
+                    running = False
+                elif event.key == pygame.K_BACKSPACE:
+                    text = text[:-1] # в помойку
+
+    screen.fill((30, 30, 30))
+        
+    pygame.draw.rect(screen, current_color, input_box, 2)
+    text1 = font.render("введите режим", True, (255, 255, 255))
+    screen.blit(text1, (360, 350))
+    txt_surface = font.render(text, True, (255, 255, 255))
+    screen.blit(txt_surface, (input_box.x + 5, input_box.y + 5))
+        
+    pygame.display.flip()
+
+pygame.quit()
+pygame.init()
+SYSTEM = str(platform.system())
+print(f'(TEST) YOUR SYSTEM IS {SYSTEM}')
+
+
 if MODE == "standart":
-    InputString = input("введите входную строку: ").replace(" ", "")
+    screen = pygame.display.set_mode((WINDOW_SIZE, WINDOW_SIZE))
+    font = pygame.font.SysFont("arial", 40)
+    text = ""
+    color_when_pressed = pygame.Color('lightskyblue3')
+    color_when_not_pressed = pygame.Color('chartreuse4')
+    current_color = color_when_not_pressed
+    is_pressed = False
+    input_box = pygame.Rect(250, 470, 500, 45)
+
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+                exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if input_box.collidepoint(event.pos): # проверка что я попалл
+                    is_pressed = True
+                    current_color = color_when_pressed
+                else:
+                    is_pressed = False
+                    current_color = color_when_not_pressed
+            
+            if event.type == pygame.TEXTINPUT:
+                if is_pressed:
+                    text += event.text
+            
+            elif event.type == pygame.KEYDOWN:
+                if is_pressed:
+                    if event.key == pygame.K_RETURN:
+                        InputString = text
+                        running = False
+                    elif event.key == pygame.K_BACKSPACE:
+                        text = text[:-1] # в помойку
+
+        screen.fill((30, 30, 30))
+        
+        pygame.draw.rect(screen, current_color, input_box, 2)
+        text1 = font.render("введите текст для шифрования", True, (255, 255, 255))
+        screen.blit(text1, (230, 350))
+        txt_surface = font.render(text, True, (255, 255, 255))
+        screen.blit(txt_surface, (input_box.x + 5, input_box.y + 5))
+        
+        pygame.display.flip()
+
+    pygame.quit()
 elif MODE == "decode":
-    with open(input("введите имя файла для извлечения шифротекста: ").strip("\n"), "r") as pisun:
-        InputString = list(pisun)[0].strip("\n")
+    screen = pygame.display.set_mode((WINDOW_SIZE, WINDOW_SIZE))
+    font = pygame.font.SysFont("arial", 40)
+    font1 = pygame.font.SysFont("arial", 25)
+    text = ""
+    color_when_pressed = pygame.Color('lightskyblue3')
+    color_when_not_pressed = pygame.Color('chartreuse4')
+    current_color = color_when_not_pressed
+    is_pressed = False
+    input_box = pygame.Rect(375, 470, 250, 45)
+
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+                exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if input_box.collidepoint(event.pos): # проверка что я попалл
+                    is_pressed = True
+                    current_color = color_when_pressed
+                else:
+                    is_pressed = False
+                    current_color = color_when_not_pressed
+            
+            if event.type == pygame.TEXTINPUT:
+                if is_pressed:
+                    text += event.text
+            
+            elif event.type == pygame.KEYDOWN:
+                if is_pressed:
+                    if event.key == pygame.K_RETURN:
+                        InputString = text
+                        running = False
+                    elif event.key == pygame.K_BACKSPACE:
+                        text = text[:-1] # в помойку
+
+        screen.fill((30, 30, 30))
+        
+        pygame.draw.rect(screen, current_color, input_box, 2)
+        text1 = font1.render("введите названия фала для извлечения шифротекста", True, (255, 255, 255))
+        screen.blit(text1, (250, 350))
+        txt_surface = font.render(text, True, (255, 255, 255))
+        screen.blit(txt_surface, (input_box.x + 5, input_box.y + 5))
+        
+        pygame.display.flip()
+
+    pygame.quit()
+    with open((InputString).strip("\n"), "r") as file:
+        InputString = list(file)[0].strip("\n")
+pygame.init()
 N = get_square_size(InputString)
 SQUARES_SIZE = (WINDOW_SIZE - ((N + 1) * GAP)) // N
 FONT_SIZE = SQUARES_SIZE // 3 * 2
