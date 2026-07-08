@@ -31,9 +31,8 @@ MODE = input("введите режим: ")
 if MODE == "standart":
     InputString = input("введите входную строку: ").replace(" ", "")
 elif MODE == "decode":
-    with open(input("введите имя файла для извлечения шифротекста: "), "r") as pisun:
-        InputString = list(pisun)[0]
-WITH_LINA_AND_PUDGE = input()
+    with open(input("введите имя файла для извлечения шифротекста: ").strip("\n"), "r") as pisun:
+        InputString = list(pisun)[0].strip("\n")
 N = get_square_size(InputString)
 SQUARES_SIZE = (WINDOW_SIZE - ((N + 1) * GAP)) // N
 FONT_SIZE = SQUARES_SIZE // 3 * 2
@@ -111,26 +110,9 @@ if MODE == "standart":
                         rect = pygame.draw.rect(screen, (84, 92, 78), (current_x, current_y, SQUARES_SIZE, SQUARES_SIZE))
                     elif is_pressed.get((row, col), False):
                         rect = pygame.draw.rect(screen, (0, 102, 0), (current_x, current_y, SQUARES_SIZE, SQUARES_SIZE))
-                        if WITH_LINA_AND_PUDGE == "OK":
-                            if SYSTEM == "Linux":
-                                try:
-                                    scaled_image = pygame.transform.scale(pygame.image.load("Загрузки/pudge.png"), (rect.width, rect.height))
-                                except:
-                                    scaled_image = pygame.transform.scale(pygame.image.load("Изображения/pudge.png"), (rect.width, rect.height))
-                            elif SYSTEM == "Windows":
-                                scaled_image = pygame.transform.scale(pygame.image.load(r"C:\Users\Downloads\pudge.png"), (rect.width, rect.height))
-                            screen.blit(scaled_image, rect)
+
                     else:
                         rect = pygame.draw.rect(screen, (0, 0, 0), (current_x, current_y, SQUARES_SIZE, SQUARES_SIZE))
-                        if WITH_LINA_AND_PUDGE == "OK":
-                            try:
-                                scaled_image = pygame.transform.scale(pygame.image.load("Загрузки/2026-06-30_21-32.png"), (rect.width, rect.height))
-                            except:
-                                scaled_image = pygame.transform.scale(pygame.image.load("Изображения/2026-06-30_21-32.png"), (rect.width, rect.height))
-                        elif SYSTEM == "Windows":
-                                scaled_image = pygame.transform.scale(pygame.image.load(r"C:\Users\Downloads\2026-06-30_21-32.png"), (rect.width, rect.height))
-                        screen.blit(scaled_image, rect)
-
                     text_for_square = get_letter_by_index(InputString, index)
                     text = FONT.render(text_for_square, True, (255, 255, 255))  
 
